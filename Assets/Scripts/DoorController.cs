@@ -6,6 +6,7 @@ public class DoorController : MonoBehaviour
 {
     private Animator doorAnimation;
     private float currentTimer;
+    private bool currentState;
 
     private void Awake()
     {
@@ -15,34 +16,21 @@ public class DoorController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log($"{currentTimer}");
         DoorTick();
     }
 
     private void DoorTick()
     {
-        if (!doorAnimation.GetBool("Open"))
-        {
-            currentTimer += Time.deltaTime;
-            doorAnimation.SetFloat("TimeForOpen", currentTimer);
-        }
-        else
-        {
-            currentTimer += Time.deltaTime;
-            doorAnimation.SetFloat("TimeForClose", currentTimer);
-        }
-
+        currentTimer += Time.deltaTime;
+        doorAnimation.SetFloat("DoorTimer", currentTimer);
     }
 
-    private void DoorIsOpen()
+    private void DoorChangeState()
     {
         currentTimer = 0;
-        doorAnimation.SetFloat("TimeForOpen", currentTimer);
-        doorAnimation.SetBool("Open", true);
+        doorAnimation.SetFloat("DoorTimer", currentTimer);
+        currentState = doorAnimation.GetBool("Open") ? false : true;
+        doorAnimation.SetBool("Open", currentState);
     }
-    private void DoorIsClosed()
-    {
 
-        doorAnimation.SetBool("Open", false);
-    }
 }
